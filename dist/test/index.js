@@ -1,1 +1,0 @@
-console.log('Prueba desde CDN Repositori');
