@@ -11,10 +11,8 @@ class UtilsForms {
         const isDifferentInput = type === 'checkbox' || type === 'radio' || type === 'text' || type === 'select';
         const inputElement = isDifferentInput ? $(element) : $(element).parent();
         
-        if($(element).attr('data-object-type') === 'section') {
-            console.log('setRequired can only be used on elements, not on sections');
-            return;
-        } 
+        if($(element).attr('data-object-type') === 'section') return;
+
         if (value) {
             inputElement.attr("required", value);    
         } else {
@@ -223,7 +221,6 @@ $(document).ready(function() {
     
     parentSection.on("select2:selecting", '.selectServiceProvided', (event) => {
         const rowId = utils.getParentRow(event.currentTarget);
-        console.log(event.params.args.data.id);
         const sectionRow = $(`[data-row="${rowId}"]`);
         sectionRow.find('.hide-property').each(function() {
             $(this).hide();
@@ -235,7 +232,6 @@ $(document).ready(function() {
     });
     parentSection.on("select2:selecting", '.hoursCredited', (event) => {
         const rowId = utils.getParentRow(event.currentTarget);
-        console.log(event.params.args.data.id);
         const sectionRow = $(`[data-row="${rowId}"]`);
         const hoursReport = sectionRow.find('.hours').val();
         if (event.params.args.data.id > hoursReport) {
@@ -269,7 +265,6 @@ $(document).ready(function() {
 
     parentSection.on('keyup', '.ifEmailSelected', function() {
         const inputValue = parseInt($(this).val(), 10);
-        console.log('input value', inputValue);
         if (inputValue >= 0) {
             const rowId = utils.getParentRow(this);
             const sectionRow = $(`[data-row="${rowId}"]`);
