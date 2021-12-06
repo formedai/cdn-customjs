@@ -198,7 +198,7 @@ $(document).ready(function() {
             utils.setRequired(sectionRow.find('select[id^="p_94_"]'), 'select', false);
         },
         'IfPropertyInspec-In-Person': (sectionRow) => {
-            utils.setRequired(sectionRow.find('select[id^="p_136_"]'), 'select', false);
+            utils.setRequired(sectionRow.find('select[id^="p_136_"]'), 'select', true);
         },
         'IfPropertyInspec-Remotely': (sectionRow) => {
             utils.setRequired(sectionRow.find('select[id^="p_136_"]'), 'select', false);
@@ -339,7 +339,6 @@ $(document).ready(function() {
     }
 
     function validate(isSaving) {
-        //validateManager("VAL.CUONZO@MANAGEMENTTRUST.COM", "10006");
         const emailValue = $EmailInput.val().trim().toUpperCase();
         const managerIDValue = $ManagerIDInput.val().trim().toUpperCase();
         validateManager(emailValue, managerIDValue, isSaving);
