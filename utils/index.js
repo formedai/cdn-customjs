@@ -5,6 +5,50 @@
 class UtilsForms {
 
     /**
+     * lastname initAutoNumerics
+    * Set element(s) to auto numeric
+    * 
+    * @param string elements is the Dom Element
+    */
+    setElementsNumeric(elements, multiple = false) {
+        
+        if ($.isArray(elements)) {
+            $.each(elements, function( index, element ) {
+                if (multiple) {
+                    AutoNumeric.multiple(element);
+                    return;
+                }
+                new AutoNumeric(element);
+            });
+            return;
+        }
+    
+        if (multiple) {
+            AutoNumeric.multiple(elements);
+            return;
+        }
+        new AutoNumeric(elements);
+    }
+
+    /**
+    *
+    * Set value of element
+    * 
+    * @param string element is id|class|DomElement
+    * @param value string|number
+    */
+    setValue(element, value, type = '') {
+
+        if (type === 'autonumeric') {
+            const element = AutoNumeric.getAutoNumericElement(element);
+            element.set(value);
+            return;
+        }
+
+        $(element).val(value);
+    }
+
+    /**
     * Set element(s) to readonly
     * 
     * @param string element is the Dom Element
@@ -72,4 +116,30 @@ class UtilsForms {
         }
         return rndNumber;
     }
+
+    /**
+     * Function to generate an unique identifier.
+     *
+     * @param callback suffix A custom unique id suffix, by default: null
+     * @void
+     */
+    checkAmount(event, callback) {
+        const $itemSection = $(event.currentTarget).parents('.items');
+        const $quantity = $itemSection.find('[data-code="quantity"]') || $itemSection.find('[data-code="qty"]');
+        const $priceElement = $itemSection.find('[data-code="price"]')
+        const $amountElement = $itemSection.find('[data-code="amount"]');
+        
+        const priceAutoNumeric = AutoNumeric.getAutoNumericElement($priceElement.get(0));
+        const amountAutoNumeric = AutoNumeric.getAutoNumericElement($amountElement.get(0));
+        
+        const quantityNumber = Number.isNaN(Number($quantity.val())) ? 0 : Number($quantity.val());
+        
+        amountAutoNumeric.set(priceAutoNumeric.getNumber() * quantityNumber);
+        
+        // calculateSubTotal(event);
+        // calculateTotal();
+        callback(event);
+    }
+
+    
 }
