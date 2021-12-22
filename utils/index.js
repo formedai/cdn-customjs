@@ -40,7 +40,7 @@ class UtilsForms {
     setValue(element, value, type = '') {
 
         if (type === 'autonumeric') {
-            const element = AutoNumeric.getAutoNumericElement(element);
+            const element = this.getElement(element);
             element.set(value);
             return;
         }
@@ -77,6 +77,18 @@ class UtilsForms {
         } else {
             inputElement.removeAttr("required");
         }
+    }
+    /**
+     * Get element 
+     *
+     * @param string type is autonumeric | ''
+     * @return element instance
+     */
+    getElement(element, type = '') {
+        if (type === 'autonumeric')
+            return AutoNumeric.getAutoNumericElement(element);
+
+        return $(element);
     }
 
     /**
@@ -126,20 +138,22 @@ class UtilsForms {
     checkAmount(event, callback) {
         const $itemSection = $(event.currentTarget).parents('.items');
         const $quantity = $itemSection.find('[data-code="quantity"]') || $itemSection.find('[data-code="qty"]');
-        const $priceElement = $itemSection.find('[data-code="price"]')
-        const $amountElement = $itemSection.find('[data-code="amount"]');
+        const $priceElement = $itemSection.find('[data-code="price"]') 
+        || $itemSection.find('[data-code="rate"]') || $itemSection.find('[data-code="unitPrice"]');
+        const $amountElement = $itemSection.find('[data-code="amount"]') || $itemSection.find('[data-code="itemAmount"]');
         
-        const priceAutoNumeric = AutoNumeric.getAutoNumericElement($priceElement.get(0));
-        const amountAutoNumeric = AutoNumeric.getAutoNumericElement($amountElement.get(0));
+        const priceAutoNumeric = this.getElement($priceElement.get(0));
+        // AutoNumeric.getAutoNumericElement($priceElement.get(0));
+        // const amountAutoNumeric = AutoNumeric.getAutoNumericElement($amountElement.get(0));
         
         const quantityNumber = Number.isNaN(Number($quantity.val())) ? 0 : Number($quantity.val());
         
-        amountAutoNumeric.set(priceAutoNumeric.getNumber() * quantityNumber);
+        this.setValue($amountElement.get(0), priceAutoNumeric.getNumber() * quantityNumber, 'autonumeric');
+        // amountAutoNumeric.set(priceAutoNumeric.getNumber() * quantityNumber);
         
         // calculateSubTotal(event);
         // calculateTotal();
         callback(event);
     }
 
-    
 }
