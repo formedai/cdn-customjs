@@ -9,6 +9,7 @@ class UtilsForms {
     * Set element(s) to auto numeric
     * 
     * @param string elements is the Dom Element
+    * @param boolean multiple false|true 
     */
     setElementsNumeric(elements, multiple = false) {
         
