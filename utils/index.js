@@ -41,8 +41,8 @@ class UtilsForms {
     setValue(element, value, type = '') {
 
         if (type === 'autonumeric') {
-            const element = this.getElement(element);
-            element.set(value);
+            const inputNumeric = this.getElement(element);
+            inputNumeric.set(value);
             return;
         }
 
@@ -68,8 +68,15 @@ class UtilsForms {
      * @param boolean value true | false
      */
     setRequired(element, type, value) {
-        const isDifferentInput = type === 'checkbox' || type === 'radio' || type === 'text' || type === 'select';
-        const inputElement = isDifferentInput ? $(element) : $(element).parent();
+        const isDifferentInput = [
+            'checkbox',
+            'radio',
+            'text',
+            'select'
+        ];
+        const inputElement = isDifferentInput[type]
+        ? $(element)
+        : $(element).parent();
         
         if($(element).attr('data-object-type') === 'section') return;
 
