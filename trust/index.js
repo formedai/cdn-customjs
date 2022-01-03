@@ -85,15 +85,6 @@ $(document).ready(function() {
             utils.setRequired(sectionRow.find('input[id^="p_76_"]'), 'text', true);
             sectionRow.find('.code_ifBoardMtgAttend, .code_boardMeetingAct').show();
             sectionRow.find('input[id^="p_77_"]').parent().parent().show();
-            Swal.fire({
-                title: 'Please Notes!',
-                html:`
-                <b>It is required to entered meeting preparation!</b></br>
-                <p>Please click in add new and selected in service provided Meeting preparation</p>
-                `,
-                type:  'info',
-                showConfirmButton: true
-            });
         },
         'Committee Meeting Attendance':(sectionRow) => {
             sectionRow.find('.code_ifCommunityMeeti').show();
@@ -220,6 +211,7 @@ $(document).ready(function() {
     });
     
     parentSection.on("select2:selecting", '.selectServiceProvided', (event) => {
+        const optionSelect = event.params.args.data.id;
         const rowId = utils.getParentRow(event.currentTarget);
         const sectionRow = $(`[data-row="${rowId}"]`);
         sectionRow.find('.hide-property').each(function() {
@@ -227,8 +219,19 @@ $(document).ready(function() {
             $(this).find('input').removeAttr("required");
             setInputsOverride(sectionRow, $('input[id^="p_9_"]').is(':checked'));
         });
-        if (optionSelected[event.params.args.data.id])
-            optionSelected[event.params.args.data.id](sectionRow);
+        if (optionSelected[optionSelect])
+            optionSelected[optionSelect](sectionRow);
+        if (optionSelect === 'Boarding Meeting Attendance') {
+            Swal.fire({
+                title: 'Please Notes!',
+                html:`
+                <b>It is required to entered meeting preparation!</b></br>
+                <p>Please click in add new and selected in service provided Meeting preparation</p>
+                `,
+                type:  'info',
+                showConfirmButton: true
+            });
+        }
     });
     parentSection.on("select2:selecting", '.hoursCredited', (event) => {
         const rowId = utils.getParentRow(event.currentTarget);
@@ -290,7 +293,7 @@ $(document).ready(function() {
     initEachServicesProvided(optionSelected);
 
     $('[data-object-type="section"]').on('click', '.add-new-item', function(e) {
-        initEachServicesProvided(optionSelected);
+        initEachServicesProvided(optionSelected, true);
     });
 
     function setInputsOverride(sectionRow, visible) {
@@ -310,7 +313,7 @@ $(document).ready(function() {
         $('#top-btnContinueWorkflow').on('click', function() { validate(true); });
     }
 
-    function initEachServicesProvided(optionSelected) {
+    function initEachServicesProvided(optionSelected, reset = false) {
         $('.code_serviceProvidedS').each(function(){
             const Select = $(this).find('.form-select2');
             const rowId = utils.getParentRow(Select);
@@ -328,8 +331,15 @@ $(document).ready(function() {
                     'Authorization': `Bearer ${formedai.utilities.getCookie('auth')}`
                 }
             });
-            if (Select.val())
+            if (Select.val() && !reset && optionSelected[Select.val()])
                 optionSelected[Select.val()](sectionRow);
+            if($('[data-object-type="row"]').last().data('row') === rowId 
+            && reset) {
+                sectionRow.find('.hide-property').each(function() {
+                    $(this).hide();
+                    $(this).find('input').removeAttr("required");
+                });
+            }
         });
     }
 
