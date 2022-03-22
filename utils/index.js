@@ -38,9 +38,9 @@ class UtilsForms {
     * @param string element is id|class|DomElement
     * @param value string|number
     */
-    setValue(element, value, type = '') {
-
-        if (type === 'autonumeric') {
+    setValue(element, value) {
+        
+        if (AutoNumeric.getAutoNumericElement(element) === null) {
             const inputNumeric = this.getElement(element);
             inputNumeric.set(value);
             return;
@@ -92,8 +92,8 @@ class UtilsForms {
      * @param string type is autonumeric | ''
      * @return element instance
      */
-    getElement(element, type = '') {
-        if (type === 'autonumeric')
+    getElement(element) {
+        if (AutoNumeric.getAutoNumericElement(element) === null)
             return AutoNumeric.getAutoNumericElement(element);
 
         return $(element);
@@ -156,7 +156,7 @@ class UtilsForms {
         
         const quantityNumber = Number.isNaN(Number($quantity.val())) ? 0 : Number($quantity.val());
         
-        this.setValue($amountElement.get(0), priceAutoNumeric.getNumber() * quantityNumber, 'autonumeric');
+        this.setValue($amountElement.get(0), priceAutoNumeric.getNumber() * quantityNumber);
         // amountAutoNumeric.set(priceAutoNumeric.getNumber() * quantityNumber);
         
         // calculateSubTotal(event);
