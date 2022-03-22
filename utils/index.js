@@ -40,7 +40,7 @@ class UtilsForms {
     */
     setValue(element, value) {
         
-        if (AutoNumeric.getAutoNumericElement(element) === null) {
+        if (AutoNumeric.getAutoNumericElement(element) !== null) {
             const inputNumeric = this.getElement(element);
             inputNumeric.set(value);
             return;
@@ -93,7 +93,7 @@ class UtilsForms {
      * @return element instance
      */
     getElement(element) {
-        if (AutoNumeric.getAutoNumericElement(element) === null)
+        if (AutoNumeric.getAutoNumericElement(element) !== null)
             return AutoNumeric.getAutoNumericElement(element);
 
         return $(element);
